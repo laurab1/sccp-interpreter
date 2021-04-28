@@ -1,9 +1,12 @@
 import Types
 
-data Agent = Tell (Constraint Var Int Int) | Ask (Constraint Var Int Int) Agent 
-    | Stop | Par Agent Agent | Ex Var Agent | ProcCall Var deriving Show
-
 type Delta = [(Constraint Var Int Int)]
+
+type IntC = (Constraint Var Int Int)
+
+data Agent = Tell IntC | Ask IntC Agent 
+    | Stop | Par (Agent, Agent) | Ex (Var, Agent) | ProcCall Var 
+    deriving Show
 
 cappend (Constraint a b c) EmptyC = Constraint a b c 
 cappend EmptyC (Constraint a b c) = Constraint a b c
