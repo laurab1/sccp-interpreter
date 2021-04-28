@@ -13,10 +13,8 @@ cappend EmptyC (Constraint a b c) = Constraint a b c
 cappend (Constraint a1 b1 c1) (Constraint a2 b2 c2) = 
     if a1 == a2 then (Constraint a1 (b1 + b2) (c1 + c2)) else EmptyC
 
-cempty = EmptyC
-
 instance (Num c, Num b) => Monoid (Constraint a b c) where
-    mempty = cempty
+    mempty = EmptyC
     mappend = cappend
 
 csubtract (Constraint a b c) EmptyC = Constraint a b c
