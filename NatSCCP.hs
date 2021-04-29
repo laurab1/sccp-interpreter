@@ -46,12 +46,21 @@ ask (Constraint a b c) delta = case delta of
             else ask (Constraint a b c) cs
         else ask (Constraint a b c) cs
 
--- naive
+contains d x = case d of
+    [] -> False
+    (Constraint y b c):cs -> if x == y then True else contains cs x 
+
 eval a d = case a of
     Stop -> d
-    Tell (Constraint a b c) ->  tell (Constraint a b c) d
-    Ask (Constraint a b c) a1 -> if (ask (Constraint a b c) d) then (eval a1 d) else d
-    Par (a, b) -> 
-        par e1 (pseq e1 (e1 ++ e2)) where
-            e1 = (eval a d)
-            e2 = (eval b d)
+    Tell (Constraint x b c) -> tell (Constraint x b c) d
+    Ask (Constraint x b c) a1 ->
+        if ask (Constraint x b c) d
+            then eval a1 d
+            else eval a d
+    Par (a1, a2) -> 
+        (par e1 (pseq e2 (merge e1 e2))) where
+            e1 = eval a1 d
+            e2 = eval a2 d
+            merge d1 d2 = case d1 of
+                [] -> d2
+                c:cs -> merge cs (tell c d2)
