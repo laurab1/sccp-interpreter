@@ -9,7 +9,7 @@ import Data.Monoid
 
 class Monoid a => RPOMonoid a where
     msubtract :: a -> a -> a
-    mleq :: a -> a -> a
+    mleq :: a -> a -> Bool
 
 type Var = [Char]
 
@@ -19,5 +19,3 @@ data Constraint x d v where
 
 instance Show (Constraint a b c) where
     show (Constraint a b c) = show (a, b, c)
-
-eval (Constraint x1 d1 v1) = Constraint x1 d1 v1
