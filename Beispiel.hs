@@ -11,4 +11,4 @@ eval (ProcCall "p" "z") [(Constraint "z" 2 4)] [("p", ("x", Tell (Constraint"x" 
 let a2 = (Tell (Constraint "x" 2 4))
 let a2 = (Ask (Constraint "x" 2 4) (Tell (Constraint "x" 3 4)))
 eval (Par(a1, a2)) [] []
---[("x",7,12)]
+-- [("x",5,8)]
