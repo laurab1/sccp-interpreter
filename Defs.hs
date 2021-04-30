@@ -83,7 +83,7 @@ acontains a x env = case a of
     Hide (y, a1) -> if x == y then False else (acontains a1 x env)
     ProcCall p w -> let res = lookup p env in
         case res of
-            Nothing -> error ("undefined identifier" ++ p)
+            Nothing -> error ("undefined identifier " ++ p)
             Just (var, cl) -> if var == x then True else acontains cl x env
 
 freshx x d = 

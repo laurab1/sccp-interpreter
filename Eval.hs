@@ -25,17 +25,14 @@ eval a d r = case a of
             then eval a1 d r
             else eval a d r
     Par (a1, a2) -> 
-        (par e1 (pseq e2 (merge e1 e2))) where
+        (par e1 e2) where
             e1 = eval a1 d r
             e2 = eval a2 e1 r
-            merge d1 d2 = case d1 of
-                [] -> d2
-                c:cs -> merge cs (tell c d2)
     Hide (v, a1) ->
         if acontains a1 v r then eval (subst a v (freshx v d)) d r else eval a1 d r
     ProcCall p y -> let closure = lookup p r in
         case closure of
-            Nothing -> error ("undefined identifier" ++ p)
+            Nothing -> error ("undefined identifier " ++ p)
             Just (var, aloc) ->
                 let anew = subst aloc var y in
                     eval anew d r
