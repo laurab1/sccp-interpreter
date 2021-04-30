@@ -78,9 +78,19 @@ acontains a x = case a of
     Par (a1, a2) -> (acontains a1 x) || (acontains a2 x)
     Hide (y, a1) -> if x == y then False else (acontains a1 x)
 
-subst a x = case a of
+freshx x d = 
+    let newx = (if length x == 1 then x ++ "1" else x ++ [intToDigit ((digitToInt (x!!1)) + 1)])
+        in aux newx d where
+            aux z d1 = if dcontains d1 z then z else freshx z d1
+
+subst a x z = case a of
+    Stop -> Stop
+    Tell c1 @ (Constraint y b c) -> 
+        if x == y then Tell (Constraint z b c) else (Tell c1)
+    Ask c1 @ (Constraint y b c) a1 -> 
+        if x == y then Ask (Constraint z b c) (subst a1 x z) else (Ask c1 (subst a1 x z))
     Hide (y, a1) -> 
-        if x /= y then subst a1 x else Hide (freshx, a1) where
-            freshx = 
-                if length x == 1 then x ++ "1" 
-                else x ++ [intToDigit ((digitToInt (x!!1)) + 1)]
+        if x == y then Hide (z, a1) else
+            if y == z then Hide ((freshx z []), (subst (subst a1 x z) z (freshx z [])))
+            else Hide (y, (subst a1 x z))
+    Par (a1, a2) -> Par ((subst a1 x z), (subst a2 x z))              

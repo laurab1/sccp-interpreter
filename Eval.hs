@@ -32,4 +32,4 @@ eval a d = case a of
                 [] -> d2
                 c:cs -> merge cs (tell c d2)
     Hide (v, a1) ->
-        if acontains a1 v then eval (subst a1 v) d else eval a1 d
+        if acontains a1 v then eval (subst a v (freshx v d)) d else eval a1 d
