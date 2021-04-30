@@ -27,7 +27,7 @@ eval a d r = case a of
     Par (a1, a2) -> 
         (par e1 (pseq e2 (merge e1 e2))) where
             e1 = eval a1 d r
-            e2 = eval a2 d r
+            e2 = eval a2 e1 r
             merge d1 d2 = case d1 of
                 [] -> d2
                 c:cs -> merge cs (tell c d2)
