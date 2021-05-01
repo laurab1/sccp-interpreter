@@ -15,6 +15,7 @@
 -- Contains the agents definitions and some auxiliary functions
 -- needed to perform substitutions of variables, creating fresh
 -- variables and manipulating the store.
+{-# OPTIONS_GHC -Wno-deferred-type-errors #-}
 module Defs (
     module Defs
 ) where
@@ -32,12 +33,16 @@ data Agent = Tell IntC | Ask IntC Agent | Stop
 
 type Closure = (Var, Agent)
 
-type Env = [(Var, Closure)]    
+type Env = [(Var, Closure)]
+
 
 cappend (Constraint a b c) EmptyC = Constraint a b c 
 cappend EmptyC (Constraint a b c) = Constraint a b c
 cappend (Constraint a1 b1 c1) (Constraint a2 b2 c2) = 
     if a1 == a2 then (Constraint a1 (b1 + b2) (c1 + c2)) else EmptyC
+
+instance (Num c, Num b) => Semigroup (Constraint a b c) where
+    (<>) = cappend
 
 instance (Num c, Num b) => Monoid (Constraint a b c) where
     mempty = EmptyC

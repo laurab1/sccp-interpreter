@@ -13,6 +13,10 @@
 --   limitations under the License.
 
 -- Main interpreter
+module Eval (
+    eval
+) where
+
 import Defs
 import Types
 import Control.Parallel
